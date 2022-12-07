@@ -1,7 +1,7 @@
 import java.lang.reflect.Array;
 
 public class FixedStack<T> implements Stack<T>{
-    private T[] stack;
+    private final T[] stack;
     private int top = 0;
 
     //constructor
@@ -13,35 +13,56 @@ public class FixedStack<T> implements Stack<T>{
 
     @Override
     public void push(T newEntry) { //add element from top of the list
-        stack[top] = newEntry;
-        if(top < stack.length) {
-            top++; //increment top value so that when user pushes to stack again, it will be at stack[1], stack[2], stack[3], etc.
+
+        try{
+            if (top < stack.length){
+                stack[top] = newEntry;
+                System.out.println("Adding element: " + newEntry);
+                top++; //increment top value so that when user pushes to stack again, it will be at stack[1], stack[2], stack[3], etc.
+            } else {
+                throw new ArrayIndexOutOfBoundsException("Out of bounds! Cannot add any elements.");
+            }
+        } catch (ArrayIndexOutOfBoundsException er){
+            System.out.println(er.getMessage());
         }
+
 
     }
 
     @Override
-    public T pop() { //remove element from top of the list
-        T data; //used to store generic type
-        top--; //decrement top because we are going to delete an element
-        data = stack[top]; //data is = to stack[top]
-        stack[top] = null; //stack @ top is null.
-        return data; //return data. (in case we want to print which element was deleted.)
+    public void pop() { //remove element from top of the list
+
+        try{
+            if(stack[0] == null){
+                throw new ArrayIndexOutOfBoundsException("Out of bounds! Cannot remove any elements.");
+            } else{
+                T data; //used to store generic type
+                top--; //decrement top because we are going to delete an element
+                data = stack[top]; //data is = to stack[top]
+                System.out.println("Removing element at the top of stack: " + data);
+                stack[top] = null; //stack @ top is null.
+            }
+
+        } catch (ArrayIndexOutOfBoundsException er){
+            System.out.println(er.getMessage());
+        }
     }
 
     @Override
     public T peek() {
-        return null;
+        return stack[top];
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return stack[top] == null;
     }
 
     @Override
     public void clear() {
-
+        for (T ignored : stack){
+            pop();
+        }
     }
 
     @Override
